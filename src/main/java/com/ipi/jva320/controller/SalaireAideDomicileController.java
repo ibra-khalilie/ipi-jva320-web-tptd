@@ -46,6 +46,7 @@ public class SalaireAideDomicileController {
         return "redirect:/salaries/" + salarie.getId();
     }
 
+
     @PostMapping(value = "/salaries/{id}")
     public String updateSalarie(SalarieAideADomicile salarie) throws SalarieException {
         salarieAideADomicileService.updateSalarieAideADomicile(salarie);
