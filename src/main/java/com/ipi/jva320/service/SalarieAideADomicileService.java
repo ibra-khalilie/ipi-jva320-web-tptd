@@ -119,6 +119,11 @@ public class SalarieAideADomicileService {
         salarieAideADomicileRepository.deleteById(id);
     }
 
+
+    public List<SalarieAideADomicile> searchSalariesByNom(String nom){
+        return salarieAideADomicileRepository.findSalarieAideADomicileByNomEqualsIgnoreCase(nom);
+
+    }
     /**
      * Calcule la limite maximale de congés prenable autorisée selon les règles de l'entreprise, à savoir :
      * - de base, les congés acquis en année N-1 dans la proportion selon l'avancement dans l'année

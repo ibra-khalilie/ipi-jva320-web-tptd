@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "salarie_aideadomicile")
 public class SalarieAideADomicile {
 
     public static float CONGES_PAYES_ACQUIS_PAR_MOIS = 2.5f;
