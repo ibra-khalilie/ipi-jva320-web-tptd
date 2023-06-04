@@ -6,7 +6,9 @@ import com.ipi.jva320.model.SalarieAideADomicile;
 import com.ipi.jva320.repository.SalarieAideADomicileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
@@ -40,9 +42,25 @@ public class SalarieAideADomicileService {
         return salarieAideADomicileRepository.count();
     }
 
+
+    public Page<SalarieAideADomicile> getPageSalaries(Pageable pageable,String sortDirection, String sortField){
+
+        Sort sort;
+        if (sortDirection.equalsIgnoreCase(Sort.Direction.ASC.name())) {
+            sort = Sort.by(sortField).ascending();
+        } else {
+            sort = Sort.by(sortField).descending();
+        }
+        Pageable page = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        Page<SalarieAideADomicile> salariePage = this.salarieAideADomicileRepository.findAll(page);
+        return salariePage;
+    }
+
     /**
      * @return le nombre de salariés dans la base
      */
+
     public List<SalarieAideADomicile> getSalaries() {
         return StreamSupport.stream(salarieAideADomicileRepository.findAll().spliterator(), false)
                 .collect(Collectors.toList());

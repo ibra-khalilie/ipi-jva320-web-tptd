@@ -5,16 +5,22 @@ import com.ipi.jva320.exception.SalarieException;
 import com.ipi.jva320.model.SalarieAideADomicile;
 import com.ipi.jva320.service.SalarieAideADomicileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class SalaireAideDomicileController {
@@ -86,6 +92,32 @@ public class SalaireAideDomicileController {
         salarieAideADomicileService.deleteSalarieAideADomicile(id);
 
         return "redirect:/salaries";
+    }
+
+
+    @GetMapping("salaries/page/")
+    public String displaySalariePagination(@RequestParam(value = "page", defaultValue = "1") int page,
+                                           @RequestParam(value = "size", defaultValue = "10") int size,
+                                           @RequestParam(value = "sortProperty", defaultValue = "id") String sortField,
+                                           @RequestParam(value = "sortDirection", defaultValue = "ASC") String sortDirection,
+                                           ModelMap model) {
+
+        if (StringUtils.isEmpty(sortDirection)) {
+            sortDirection = "ASC";
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.Direction.fromString(sortDirection), sortField);
+        Page<SalarieAideADomicile> salarieAideADomicilePage = salarieAideADomicileService.getPageSalaries(pageable, sortDirection, sortField);
+
+        if (salarieAideADomicilePage.hasContent()) {
+            model.addAttribute("salaries", salarieAideADomicilePage.getContent());
+            Long nbSalarie = salarieAideADomicileService.countSalaries();
+            model.addAttribute("nbSalarie", nbSalarie);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pas de salariés trouvés");
+        }
+
+        return "list";
     }
 
 
