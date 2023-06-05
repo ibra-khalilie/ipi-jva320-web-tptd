@@ -41,7 +41,7 @@ public class SalaireAideDomicileController {
         return "detail_Salarie";
     }
 
-    @PostMapping(value = "/salaries/aide/new")
+    @GetMapping(value = "/salaries/aide/new")
     public String newSalarie(ModelMap model) {
         return "detail_Salarie";
     }

@@ -105,14 +105,9 @@
     <div class="row mt-2">
         <div class="col-lg-6">
             <input form="saveForm" class="btn btn-primary" type="submit" value="Enregistrer">
-
-            <form th:action="@{'/salaries/' + ${salarie.id} + '/delete'}" method="DELETE">
-                <input type="hidden" name="_method" value="delete" />
-                <button type="submit" class="btn btn-danger">Supprimer</button>
-            </form>
-
-
+            <a th:href="${salarie} != null ? @{/salaries/{id}/delete(id=${salarie.id})} : ''" class="btn btn-danger">Supprimer</a>
         </div>
+    </div>
     </div>
 
     <div class="row">
